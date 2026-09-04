@@ -2,6 +2,13 @@
 
 Gemini CLI supports ACP natively via the `--acp` flag — no adapter needed.
 
+> **Migration notice:** Since June 18, 2026, Gemini CLI no longer serves Google AI
+> Pro, Google AI Ultra, or free-tier individual accounts. Google recommends
+> migrating those users to Antigravity CLI. Enterprise users with Gemini Code
+> Assist licenses and API-key authentication remain supported. See Google's
+> [transition announcement](https://github.com/google-gemini/gemini-cli/discussions/27274)
+> and [June 18 update](https://github.com/google-gemini/gemini-cli/discussions/28017).
+
 ## Docker Image
 
 ```bash
