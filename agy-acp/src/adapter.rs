@@ -7,6 +7,8 @@ use uuid::Uuid;
 
 use crate::types::*;
 
+const DEFAULT_PRINT_TIMEOUT: &str = "20m";
+
 fn prompt_extra_args(extra: &str) -> Vec<String> {
     let mut args = shell_words::split(extra).unwrap_or_else(|_| {
         eprintln!("[agy-acp] WARN: failed to parse AGY_EXTRA_ARGS, ignoring");
@@ -17,7 +19,7 @@ fn prompt_extra_args(extra: &str) -> Vec<String> {
         .any(|arg| arg == "--print-timeout" || arg.starts_with("--print-timeout="))
     {
         args.push("--print-timeout".to_string());
-        args.push("20m".to_string());
+        args.push(DEFAULT_PRINT_TIMEOUT.to_string());
     }
     args
 }
