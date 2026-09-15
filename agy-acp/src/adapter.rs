@@ -405,6 +405,19 @@ mod tests {
     }
 
     #[test]
+    fn invalid_explicit_timeouts_are_left_for_cli_validation() {
+        for extra in [
+            "--print-timeout",
+            "--print-timeout=",
+            "--print-timeout ''",
+            "--print-timeout --model example",
+            "--print-timeout=invalid",
+        ] {
+            assert_eq!(prompt_extra_args(extra), shell_words::split(extra).unwrap());
+        }
+    }
+
+    #[test]
     fn similar_flag_does_not_suppress_default() {
         assert_eq!(
             prompt_extra_args("--print-timeout-other 1s"),
