@@ -27,8 +27,27 @@ openab ──ACP JSON-RPC──► agy-acp ──spawns──► agy --add-dir /
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `AGY_WORKING_DIR` | Working directory for agy invocations | `/tmp` |
-| `AGY_EXTRA_ARGS` | Extra arguments prepended to every `agy` invocation (optional) | (none) |
+| `AGY_EXTRA_ARGS` | Extra arguments added to every `agy` prompt invocation (optional) | (none) |
 | `OPENAB_TOOL_DISPLAY` | Controls filtering of intermediate thinking narration ("I will..."). `full` or unset keeps all output; `compact`/`none`/`off` drops leading narration-only parts. | `full` |
+
+### Print timeout
+
+`agy-acp` supplies `--print-timeout 20m` on every prompt invocation unless
+`AGY_EXTRA_ARGS` includes `--print-timeout <duration>` or
+`--print-timeout=<duration>`. This gives longer tasks more time before the CLI
+ends the turn with `Error: timeout waiting for response`.
+
+**Migration:** The adapter now uses a 20-minute timeout instead of inheriting
+the CLI timeout (5 minutes in the version used to diagnose this issue). To
+retain a 5-minute limit or choose another duration, configure it explicitly:
+
+```toml
+[agent.env]
+AGY_EXTRA_ARGS = "--print-timeout 5m"
+```
+
+The timeout remains finite; tasks exceeding the configured duration can still
+fail. This setting controls the CLI print timeout, not other OpenAB timeouts.
 
 ## Steering Files
 
