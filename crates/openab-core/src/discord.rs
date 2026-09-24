@@ -1394,6 +1394,8 @@ impl EventHandler for Handler {
         // Build the shared command list once.
         let commands = vec![
             CreateCommand::new("models").description("Select the AI model for this session"),
+            CreateCommand::new("effort")
+                .description("Select the reasoning effort for this session"),
             CreateCommand::new("agents").description("Select the agent mode for this session"),
             CreateCommand::new("cancel").description("Cancel the current operation"),
             CreateCommand::new("cancel-all")
@@ -1487,6 +1489,10 @@ impl EventHandler for Handler {
         match interaction {
             Interaction::Command(cmd) if cmd.data.name == "models" => {
                 self.handle_config_command(&ctx, &cmd, "model", "model")
+                    .await;
+            }
+            Interaction::Command(cmd) if cmd.data.name == "effort" => {
+                self.handle_config_command(&ctx, &cmd, "thought_level", "reasoning effort")
                     .await;
             }
             Interaction::Command(cmd) if cmd.data.name == "agents" => {
@@ -2518,7 +2524,7 @@ impl Handler {
         };
 
         // Only allow known config categories.
-        if !matches!(category, "model" | "agent") {
+        if !matches!(category, "model" | "agent" | "thought_level") {
             return;
         }
 
@@ -3302,6 +3308,25 @@ mod tests {
         let out = truncate_for_discord(&s, 100);
         assert_eq!(out.chars().count(), 100);
         assert!(out.ends_with('…'));
+    }
+
+    #[test]
+    fn builds_reasoning_effort_select_from_thought_level() {
+        let options = vec![ConfigOption {
+            id: "thought_level".into(),
+            name: "Reasoning effort".into(),
+            description: None,
+            category: Some("thought_level".into()),
+            option_type: "enum".into(),
+            current_value: "medium".into(),
+            options: vec![ConfigOptionValue {
+                value: "medium".into(),
+                name: "Medium".into(),
+                description: None,
+            }],
+        }];
+
+        assert!(Handler::build_config_components(&options, "thought_level", None).is_some());
     }
 
     // --- format_usage_report tests (/usage slash command) ---
