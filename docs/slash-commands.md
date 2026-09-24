@@ -35,6 +35,10 @@ These read `configOptions` from the ACP `initialize` / `session/new` response an
 
 When the user picks an option, OpenAB sends `session/set_config_option` to the ACP backend.
 
+#### `/effort` compatibility
+
+`/effort` is not supported by every coding CLI. It is available only when the active CLI exposes an ACP `configOptions` entry with the `thought_level` category. OpenAB uses the values advertised by that backend instead of hardcoding a common set of effort levels, so the available choices may vary by CLI and model. If the backend does not expose `thought_level`, `/effort` shows that no reasoning effort options are available.
+
 **Agent support varies:**
 
 | Agent | `/models` | `/effort` | `/agents` |
