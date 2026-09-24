@@ -183,6 +183,17 @@ entries:
     version: 0.1.1
   openab:
   - apiVersion: v2
+    appVersion: 0.10.0-beta.4
+    created: "2026-09-24T17:05:37.714164701Z"
+    description: A lightweight, secure, cloud-native ACP harness that bridges Discord
+      and any ACP-compatible coding CLI.
+    digest: 2d28ab41f6c00b91169dee54c3897123a98a047e955416bc90f7c588c2f5c586
+    name: openab
+    type: application
+    urls:
+    - https://github.com/agent-rapi/openab/releases/download/openab-0.10.0-beta.4/openab-0.10.0-beta.4.tgz
+    version: 0.10.0-beta.4
+  - apiVersion: v2
     appVersion: 0.8.3-beta.9
     created: "2026-05-13T20:28:56.582189482Z"
     description: A lightweight, secure, cloud-native ACP harness that bridges Discord
@@ -1058,4 +1069,40 @@ entries:
     urls:
     - https://github.com/openabdev/openab/releases/download/openab-0.3.3/openab-0.3.3.tgz
     version: 0.3.3
-generated: "2026-05-13T20:28:56.582662166Z"
+  openab-feishu:
+  - apiVersion: v2
+    appVersion: 0.8.3
+    created: "2026-09-24T17:05:37.877809963Z"
+    description: OpenAB + Feishu/Lark — single-pod deployment with gateway (WebSocket
+      by default, optional Cloudflare Tunnel for webhook mode).
+    digest: d7ba5ed3f1d7253a3c00aa57789f6b94f678958eae85604b2602670219f1cdfe
+    name: openab-feishu
+    type: application
+    urls:
+    - https://github.com/agent-rapi/openab/releases/download/openab-feishu-0.1.0/openab-feishu-0.1.0.tgz
+    version: 0.1.0
+  openab-line:
+  - apiVersion: v2
+    appVersion: 0.8.5-beta.9
+    created: "2026-09-24T17:05:38.158615081Z"
+    description: OpenAB + LINE — single-pod deployment with gateway sidecar and optional
+      Cloudflare Tunnel.
+    digest: d2bf251192468a5890f97fc9416dec90a22ab6f7211849769bedb7fb135bfca9
+    name: openab-line
+    type: application
+    urls:
+    - https://github.com/agent-rapi/openab/releases/download/openab-line-0.1.0/openab-line-0.1.0.tgz
+    version: 0.1.0
+  openab-telegram:
+  - apiVersion: v2
+    appVersion: 0.8.3
+    created: "2026-09-24T17:05:38.358655061Z"
+    description: OpenAB + Telegram — single-pod deployment with gateway and Cloudflare
+      Tunnel sidecar.
+    digest: c54293275ac1cd468eb088735b5043f9ecded53112049a1a4ba32855242380b4
+    name: openab-telegram
+    type: application
+    urls:
+    - https://github.com/agent-rapi/openab/releases/download/openab-telegram-0.1.0/openab-telegram-0.1.0.tgz
+    version: 0.1.0
+generated: "2026-09-24T17:05:38.358923742Z"
