@@ -2523,10 +2523,13 @@ impl Handler {
             _ => return,
         };
 
-        // Only allow known config categories.
-        if !matches!(category, "model" | "agent" | "thought_level") {
-            return;
-        }
+        // Only allow known config categories and keep internal names out of the UI.
+        let label = match category {
+            "model" => "model",
+            "agent" => "agent",
+            "thought_level" => "reasoning effort",
+            _ => return,
+        };
 
         let thread_key = format!("discord:{}", comp.channel_id.get());
         let config_options = self.router.pool().get_config_options(&thread_key).await;
@@ -2534,12 +2537,12 @@ impl Handler {
         let response = match Self::build_config_components(&config_options, category, Some(page)) {
             Some(rows) => CreateInteractionResponse::UpdateMessage(
                 CreateInteractionResponseMessage::new()
-                    .content(format!("🔧 Select a {category}:"))
+                    .content(format!("🔧 Select a {label}:"))
                     .components(rows),
             ),
             None => CreateInteractionResponse::UpdateMessage(
                 CreateInteractionResponseMessage::new()
-                    .content(format!("⚠️ No {category} options available."))
+                    .content(format!("⚠️ No {label} options available."))
                     .components(vec![]),
             ),
         };
@@ -3314,7 +3317,7 @@ mod tests {
     #[test]
     fn builds_reasoning_effort_select_from_thought_level() {
         let options = vec![ConfigOption {
-            id: "thought_level".into(),
+            id: "reasoning_effort".into(),
             name: "Reasoning effort".into(),
             description: None,
             category: Some("thought_level".into()),
