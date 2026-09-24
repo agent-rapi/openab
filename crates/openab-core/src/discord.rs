@@ -3274,6 +3274,7 @@ fn truncate_to_utf16_budget(body: &str, prefix: &str, suffix: &str, limit: usize
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::acp::protocol::ConfigOptionValue;
     use crate::bot_turns::{TurnResult, HARD_BOT_TURN_LIMIT, BOT_TURN_LIMIT_WARNING_PREFIX};
 
     // --- truncate_for_discord (select menu option 100-char cap) ---
