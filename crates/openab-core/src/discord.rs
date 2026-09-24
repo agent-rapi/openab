@@ -1488,16 +1488,13 @@ impl EventHandler for Handler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         match interaction {
             Interaction::Command(cmd) if cmd.data.name == "models" => {
-                self.handle_config_command(&ctx, &cmd, "model", "model")
-                    .await;
+                self.handle_config_command(&ctx, &cmd, "model").await;
             }
             Interaction::Command(cmd) if cmd.data.name == "effort" => {
-                self.handle_config_command(&ctx, &cmd, "thought_level", "reasoning effort")
-                    .await;
+                self.handle_config_command(&ctx, &cmd, "thought_level").await;
             }
             Interaction::Command(cmd) if cmd.data.name == "agents" => {
-                self.handle_config_command(&ctx, &cmd, "agent", "agent")
-                    .await;
+                self.handle_config_command(&ctx, &cmd, "agent").await;
             }
             Interaction::Command(cmd) if cmd.data.name == "cancel" => {
                 self.handle_cancel_command(&ctx, &cmd).await;
@@ -1532,6 +1529,15 @@ impl EventHandler for Handler {
 }
 
 // --- Slash command & interaction handlers ---
+
+fn config_category_label(category: &str) -> Option<&'static str> {
+    match category {
+        "model" => Some("model"),
+        "agent" => Some("agent"),
+        "thought_level" => Some("reasoning effort"),
+        _ => None,
+    }
+}
 
 impl Handler {
     /// Build a Discord select menu from ACP configOptions with the given category.
@@ -1665,8 +1671,11 @@ impl Handler {
         ctx: &Context,
         cmd: &serenity::model::application::CommandInteraction,
         category: &str,
-        label: &str,
     ) {
+        let Some(label) = config_category_label(category) else {
+            tracing::warn!(category, "unknown config category");
+            return;
+        };
         let thread_key = format!("discord:{}", cmd.channel_id.get());
         let config_options = self.router.pool().get_config_options(&thread_key).await;
 
@@ -2523,12 +2532,9 @@ impl Handler {
             _ => return,
         };
 
-        // Only allow known config categories and keep internal names out of the UI.
-        let label = match category {
-            "model" => "model",
-            "agent" => "agent",
-            "thought_level" => "reasoning effort",
-            _ => return,
+        let Some(label) = config_category_label(category) else {
+            tracing::warn!(category, "unknown config category in pagination");
+            return;
         };
 
         let thread_key = format!("discord:{}", comp.channel_id.get());
@@ -3321,7 +3327,7 @@ mod tests {
             name: "Reasoning effort".into(),
             description: None,
             category: Some("thought_level".into()),
-            option_type: "enum".into(),
+            option_type: "select".into(),
             current_value: "medium".into(),
             options: vec![ConfigOptionValue {
                 value: "medium".into(),
@@ -3330,7 +3336,27 @@ mod tests {
             }],
         }];
 
-        assert!(Handler::build_config_components(&options, "thought_level", None).is_some());
+        let rows = Handler::build_config_components(&options, "thought_level", None).unwrap();
+        assert_eq!(rows.len(), 1);
+
+        let CreateActionRow::SelectMenu(menu) = &rows[0] else {
+            panic!("expected a select menu");
+        };
+        let menu = serde_json::to_value(menu).unwrap();
+        assert_eq!(menu["custom_id"], "acp_config_reasoning_effort");
+        assert_eq!(menu["placeholder"], "Current: Medium");
+        assert_eq!(menu["options"][0]["default"], true);
+    }
+
+    #[test]
+    fn config_category_labels_cover_supported_categories() {
+        assert_eq!(config_category_label("model"), Some("model"));
+        assert_eq!(config_category_label("agent"), Some("agent"));
+        assert_eq!(
+            config_category_label("thought_level"),
+            Some("reasoning effort")
+        );
+        assert_eq!(config_category_label("unknown"), None);
     }
 
     // --- format_usage_report tests (/usage slash command) ---
