@@ -9,7 +9,9 @@ OpenAB registers Discord slash commands for session control and agent management
 | `/models` | Select the AI model via dropdown menu | Yes |
 | `/effort` | Select the reasoning effort via dropdown menu | Yes |
 | `/agents` | Select the agent mode via dropdown menu | Yes |
+| `/usage` | Show usage for the current session | Yes |
 | `/cancel` | Cancel the current in-flight operation | Yes |
+| `/cancel-all` | Cancel the current operation and clear buffered messages in this thread | No (can clear buffered messages without a session) |
 | `/reset` | Reset the conversation session (clear history, start fresh) | Yes |
 | `/auth` | Authenticate the backend agent via device flow (**DM-only**) | No |
 | `/remind` | Set a one-shot delayed reminder to mention users/roles | No |
@@ -37,7 +39,7 @@ When the user picks an option, OpenAB sends `session/set_config_option` to the A
 
 #### `/effort` compatibility
 
-`/effort` is not supported by every coding CLI. It is available only when the active CLI exposes an ACP `configOptions` entry with the `thought_level` category. OpenAB uses the values advertised by that backend instead of hardcoding a common set of effort levels, so the available choices may vary by CLI and model. If the backend does not expose `thought_level`, `/effort` shows that no reasoning effort options are available.
+`/effort` is not supported by every coding CLI. It is available only when the active CLI exposes an ACP `configOptions` entry with the `thought_level` category. OpenAB uses the values advertised by that backend instead of hardcoding a common set of effort levels, so the available choices may vary by CLI and model. If the backend does not expose `thought_level`, `/effort` displays: `⚠️ No reasoning effort options available. Start a conversation first by @mentioning the bot.` The conversation-start hint also appears when a session is already active but the backend does not advertise this category; starting another conversation does not add support.
 
 **Agent support varies:**
 
