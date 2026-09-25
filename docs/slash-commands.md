@@ -9,9 +9,7 @@ OpenAB registers Discord slash commands for session control and agent management
 | `/models` | Select the AI model via dropdown menu | Yes |
 | `/effort` | Select the reasoning effort via dropdown menu | Yes |
 | `/agents` | Select the agent mode via dropdown menu | Yes |
-| `/usage` | Show usage for the current session | Yes |
 | `/cancel` | Cancel the current in-flight operation | Yes |
-| `/cancel-all` | Cancel the current operation and clear buffered messages in this thread | No (can clear buffered messages without a session) |
 | `/reset` | Reset the conversation session (clear history, start fresh) | Yes |
 | `/auth` | Authenticate the backend agent via device flow (**DM-only**) | No |
 | `/remind` | Set a one-shot delayed reminder to mention users/roles | No |
